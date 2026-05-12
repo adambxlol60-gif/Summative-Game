@@ -34,8 +34,9 @@ int main(int argc, char *argv[]) {
 
 	// Load the bitmap into the Bitmap structure
 	// image file must be in same directory.
-	// Particularly check return code of this type of function that will fail if file not found.
-	image = al_load_bitmap("BetaMap.png");
+	// Particularly check return code ofhis type of function that will fail if file not found.
+	image = al_load_bitmap("Images/BetaMap.png");
+		
   	if (!image) {
 		al_show_native_message_box(display, "Error", "Error", "Failed to load image!",
                                  nullptr, ALLEGRO_MESSAGEBOX_ERROR);
