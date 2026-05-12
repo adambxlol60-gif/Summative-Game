@@ -4,8 +4,8 @@
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_native_dialog.h>
 
-const int SCREEN_W = 4000;       // screen width
-const int SCREEN_H = 3000;       // screen height
+const int SCREEN_W = 1280;       // screen width
+const int SCREEN_H = 960;       // screen height
 
 int main(int argc, char *argv[]) {
 	ALLEGRO_DISPLAY *display = nullptr;
@@ -20,7 +20,7 @@ int main(int argc, char *argv[]) {
                                  nullptr, ALLEGRO_MESSAGEBOX_ERROR);
        	return -1;
 	}
- 	al_set_window_title(display, "Allegro Example 2 - Bitmaps");
+ 	al_set_window_title(display, "Tower Defense");
 
 	// Initialize image add on
  	if (!al_init_image_addon()) {
