@@ -3,6 +3,7 @@
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_native_dialog.h>
 #include <vector>
+#include <cmath>
 
 const int SCREEN_W = 1280;
 const int SCREEN_H = 960;
@@ -12,7 +13,8 @@ struct Tower {
     float y;
 };
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[]) {	
+	const float TOWER_SCALE = 0.2f;
     // Initialize Allegro
     if (!al_init()) {
         return -1;
@@ -97,8 +99,8 @@ int main(int argc, char *argv[]) {
             if (event.mouse.button == 1) {
                 Tower newTower;
 
-                newTower.x = event.mouse.x - al_get_bitmap_width(drakeTower) / 2;
-                newTower.y = event.mouse.y - al_get_bitmap_height(drakeTower) / 2;
+                newTower.x = event.mouse.x - (al_get_bitmap_width(drakeTower) * 0.2) / 2;
+                newTower.y = event.mouse.y - (al_get_bitmap_height(drakeTower) * 0.2) / 2;
 
                 towers.push_back(newTower);
             }
@@ -107,7 +109,7 @@ int main(int argc, char *argv[]) {
         al_draw_bitmap(image, 0, 0, 0);
 
         for (Tower tower : towers) {
-            al_draw_bitmap(drakeTower, tower.x, tower.y, 0);
+            al_draw_scaled_bitmap(drakeTower, 0, 0, al_get_bitmap_width(drakeTower), al_get_bitmap_height(drakeTower), tower.x, tower.y, al_get_bitmap_width(drakeTower) * 0.2, al_get_bitmap_height(drakeTower) * 0.2, 0);
         }
 
         al_flip_display();
