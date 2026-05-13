@@ -3,16 +3,6 @@
 #include <allegro5/allegro_native_dialog.h>
 #include <math.h>
 
-int main () {
-
-    ALLEGRO_BITMAP* Slime = al_load_bitmap("Images/Slime.png");
-    if (!Slime) {
-        al_show_native_message_box(nullptr, "Error", "Error", "Failed to load Slime image!",
-                                   nullptr, ALLEGRO_MESSAGEBOX_ERROR);
-        return -1;
-    }
-        
-}
 
 void moveSlime(ALLEGRO_BITMAP* slime, ALLEGRO_DISPLAY* display){
 
@@ -49,8 +39,10 @@ void moveSlime(ALLEGRO_BITMAP* slime, ALLEGRO_DISPLAY* display){
                                                                                                    
             al_clear_to_color(al_map_rgb(0, 0, 0));
             al_draw_bitmap(slime, x - w / 2, y - h / 2, 0);
-
-            al_flip_display(al_clear_to_color(al_map_rgb(0, 0, 0)))                                                                                        ;                                                                              )
+            al_flip_display();
+            al_rest(1.0 / 60.0); //set to 60 fps                                                                                       ;                                                                              )
         }
     }
+    al_destroy_bitmap(slime);
 }
+
