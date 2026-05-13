@@ -1,8 +1,8 @@
-// You must include the Allegro header files
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_native_dialog.h>
 #include <vector>
+#include "enemy.h"
 
 const int SCREEN_W = 1280;
 const int SCREEN_H = 960;
@@ -13,10 +13,7 @@ struct Tower {
 };
 
 int main(int argc, char *argv[]) {
-    // Initialize Allegro
-    if (!al_init()) {
-        return -1;
-    }
+    if (!al_init()) return -1;
 
     al_init_native_dialog_addon();
 
@@ -32,9 +29,7 @@ int main(int argc, char *argv[]) {
         return -1;
     }
 
-    // Create display
     ALLEGRO_DISPLAY *display = al_create_display(SCREEN_W, SCREEN_H);
-
     if (!display) {
         al_show_native_message_box(nullptr, "Error", "Error",
             "Failed to initialize display!", nullptr, ALLEGRO_MESSAGEBOX_ERROR);
@@ -45,9 +40,7 @@ int main(int argc, char *argv[]) {
     al_show_mouse_cursor(display);
     al_set_system_mouse_cursor(display, ALLEGRO_SYSTEM_MOUSE_CURSOR_ARROW);
 
-    // Load map image
     ALLEGRO_BITMAP *image = al_load_bitmap("Images/BetaMap.png");
-
     if (!image) {
         al_show_native_message_box(display, "Error", "Error",
             "Failed to load BetaMap.png!", nullptr, ALLEGRO_MESSAGEBOX_ERROR);
@@ -55,9 +48,7 @@ int main(int argc, char *argv[]) {
         return -1;
     }
 
-    // Load tower image
     ALLEGRO_BITMAP *drakeTower = al_load_bitmap("Images/DrakeTower.png");
-
     if (!drakeTower) {
         al_show_native_message_box(display, "Error", "Error",
             "Failed to load DrakeTower.png!", nullptr, ALLEGRO_MESSAGEBOX_ERROR);
@@ -66,24 +57,28 @@ int main(int argc, char *argv[]) {
         return -1;
     }
 
-    // Create event queue
-    ALLEGRO_EVENT_QUEUE *event_queue = al_create_event_queue();
-
-    if (!event_queue) {
+    ALLEGRO_BITMAP *slimeBmp = al_load_bitmap("Images/Slime.png");
+    if (!slimeBmp) {
         al_show_native_message_box(display, "Error", "Error",
-            "Failed to create event queue!", nullptr, ALLEGRO_MESSAGEBOX_ERROR);
+            "Failed to load Slime.png!", nullptr, ALLEGRO_MESSAGEBOX_ERROR);
         al_destroy_bitmap(drakeTower);
         al_destroy_bitmap(image);
         al_destroy_display(display);
         return -1;
     }
 
+    ALLEGRO_TIMER *timer = al_create_timer(1.0 / 60.0);
+    ALLEGRO_EVENT_QUEUE *event_queue = al_create_event_queue();
+ 
     al_register_event_source(event_queue, al_get_display_event_source(display));
     al_register_event_source(event_queue, al_get_mouse_event_source());
+    al_register_event_source(event_queue, al_get_timer_event_source(timer));
 
+    Slime slime = initSlime(slimeBmp);
     std::vector<Tower> towers;
-
     bool running = true;
+
+    al_start_timer(timer);
 
     while (running) {
         ALLEGRO_EVENT event;
@@ -96,25 +91,27 @@ int main(int argc, char *argv[]) {
         if (event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
             if (event.mouse.button == 1) {
                 Tower newTower;
-
                 newTower.x = event.mouse.x - al_get_bitmap_width(drakeTower) / 2;
                 newTower.y = event.mouse.y - al_get_bitmap_height(drakeTower) / 2;
-
                 towers.push_back(newTower);
             }
         }
 
-        al_draw_bitmap(image, 0, 0, 0);
+        if (event.type == ALLEGRO_EVENT_TIMER) {
+            updateSlime(slime);
 
-        for (Tower tower : towers) {
-            al_draw_bitmap(drakeTower, tower.x, tower.y, 0);
+            al_draw_bitmap(image, 0, 0, 0);
+            for (Tower tower : towers) {
+                al_draw_bitmap(drakeTower, tower.x, tower.y, 0);
+            }
+            drawSlime(slime);
+            al_flip_display();
         }
-
-        al_flip_display();
     }
 
-    // Free memory
+    al_destroy_timer(timer);
     al_destroy_event_queue(event_queue);
+    al_destroy_bitmap(slimeBmp);
     al_destroy_bitmap(drakeTower);
     al_destroy_bitmap(image);
     al_destroy_display(display);
