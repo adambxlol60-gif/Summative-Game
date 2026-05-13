@@ -2,6 +2,7 @@
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_native_dialog.h>
 #include <vector>
+#include <cmath>
 #include "enemy.h"
 
 const int SCREEN_W = 1280;
@@ -13,6 +14,7 @@ struct Tower {
 };
 
 int main(int argc, char *argv[]) {
+    const float TOWER_SCALE = 0.2f;
     if (!al_init()) return -1;
 
     al_init_native_dialog_addon();
@@ -91,8 +93,8 @@ int main(int argc, char *argv[]) {
         if (event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
             if (event.mouse.button == 1) {
                 Tower newTower;
-                newTower.x = event.mouse.x - al_get_bitmap_width(drakeTower) / 2;
-                newTower.y = event.mouse.y - al_get_bitmap_height(drakeTower) / 2;
+                newTower.x = event.mouse.x - (al_get_bitmap_width(drakeTower) * TOWER_SCALE) / 2;
+                newTower.y = event.mouse.y - (al_get_bitmap_height(drakeTower) * TOWER_SCALE) / 2;
                 towers.push_back(newTower);
             }
         }
@@ -102,7 +104,7 @@ int main(int argc, char *argv[]) {
 
             al_draw_bitmap(image, 0, 0, 0);
             for (Tower tower : towers) {
-                al_draw_bitmap(drakeTower, tower.x, tower.y, 0);
+                al_draw_scaled_bitmap(drakeTower, 0, 0, al_get_bitmap_width(drakeTower), al_get_bitmap_height(drakeTower), tower.x, tower.y, al_get_bitmap_width(drakeTower) * TOWER_SCALE, al_get_bitmap_height(drakeTower) * TOWER_SCALE, 0);
             }
             drawSlime(slime);
             al_flip_display();
