@@ -2,9 +2,9 @@
 #include <allegro5/allegro_image.h>
 #include <math.h>
 
-static float pathX[] = {0, 320, 320, 640, 640, 960, 960, 1280};
-static float pathY[] = {480, 480, 240, 240, 720, 720, 480, 480};
-static int pointCount = 8;
+static float pathX[] = {0, 250, 350, 500, 600, 750, 900, 1050, 1280};
+static float pathY[] = {480, 480, 420, 420, 560, 560, 480, 480, 480};
+static int pointCount = 9;
 
 Slime initSlime(ALLEGRO_BITMAP* bitmap) {
     Slime s;
@@ -41,5 +41,6 @@ void drawSlime(const Slime& s) {
     if (s.done) return;
     int w = al_get_bitmap_width(s.bitmap);
     int h = al_get_bitmap_height(s.bitmap);
-    al_draw_bitmap(s.bitmap, s.x - w / 2, s.y - h / 2, 0);
+    const float scale = 0.1f;
+    al_draw_scaled_bitmap(s.bitmap, 0, 0, w, h, s.x - (w * scale) / 2, s.y - (h * scale) / 2, w * scale, h * scale, 0);
 }
