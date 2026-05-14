@@ -77,9 +77,9 @@
         al_register_event_source(event_queue, al_get_mouse_event_source());
         al_register_event_source(event_queue, al_get_timer_event_source(timer));
 
-        Slime slime = initSlime(slimeBmp);
-        std::vector<Tower> towers;
-        bool running = true;
+    Slime slime = initSlime(slimeBmp);
+    std::vector<Tower> towers;
+    bool running = true;
 
         al_start_timer(timer);
 
