@@ -10,6 +10,8 @@ struct Slime {
     bool done;
 };
 
+// Function prototypes
 Slime initSlime(ALLEGRO_BITMAP* bitmap);
 void updateSlime(Slime& s);
 void drawSlime(const Slime& s);
+void loadPathFromMap(ALLEGRO_BITMAP* mapBitmap);
